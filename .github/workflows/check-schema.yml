@@ -20,7 +20,7 @@ jobs:
         shell: bash
         run: |
           CONTENT=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
-          echo $CONTENT
+          echo "FILE_NAMES=$CONTENT"
           echo "FILE_NAMES=$CONTENT" >> $GITHUB_OUTPUT
         
       - name: Print changed schemas
