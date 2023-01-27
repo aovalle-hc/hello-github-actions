@@ -1,0 +1,38 @@
+name: "Get schema-changed files between two branches."
+description: |
+  Gets a list of changed files, in /snowplow/schemas/ path, by comparing two 
+  branches, with a common ancestor.
+
+inputs:
+  base_branch:
+    description: "Branch to compare the changes with."
+    required: true
+  branch_to_merge:
+    description: "Branch that has changes, in /snowplow/schemas/, to be merged."
+    required: true
+  file_separator:
+    description: "Separator for files."
+    required: true
+    default: ";"
+
+outputs:
+  file_names:
+    description: "List of changed-file names files."
+    value: ${{ steps.get-changed-schemas.outputs.FILE_NAMES }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: get-changed-schemas
+      shell: bash
+      run: |
+        FILE_LIST_NEW_LINE_SEPARATED=\
+        $(git diff ${{ inputs.base_branch }}...${{ inputs.branch_to_merge }} \
+          --name-status --relative=snowplow/schemas/)
+        FILE_LIST_CUSTOM_SEPARATED=$(echo "$FILE_LIST_NEW_LINE_SEPARATED" | \
+          tr '\n' '${{ inputs.file_separator }}')
+        echo "FILE_NAMES=$FILE_LIST_CUSTOM_SEPARATED" >> $GITHUB_OUTPUT
+
+branding:
+  icon: "git-branch"
+  color: "blue"
