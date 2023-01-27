@@ -1,0 +1,26 @@
+name: "Get changed files"
+description: "Gets a list of changed files from comparing a branch with origin/main"
+
+inputs:
+  file_separator:
+    description: "Separator for files."
+    required: true
+
+outputs:
+  file_names:
+    description: "List of changed-file names files."
+    value: ${{ steps.get-changed-schemas.outputs.FILE_NAMES }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: get-changed-schemas
+      shell: bash
+      run: |
+        FILES_LIST=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
+        LIST_IN_ONE_LINE=$(echo "$FILES_LIST" | tr '\n' '${{ inputs.file_separator }}')
+        echo "FILE_NAMES=$LIST_IN_ONE_LINE" >> $GITHUB_OUTPUT
+
+branding:
+  icon: "mic"
+  color: "purple"

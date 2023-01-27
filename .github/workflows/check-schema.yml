@@ -15,16 +15,22 @@ jobs:
           # Source: https://github.com/marketplace/actions/checkout
           fetch-depth: 0
       
-      - name: Get changed schemas
-        id: get-changed-schemas
-        shell: bash
-        run: |
-          FILES_LIST=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
-          LIST_IN_ONE_LINE=$(echo "$FILES_LIST" | tr '\n' ';')
-          echo "FILE_NAMES=$LIST_IN_ONE_LINE" >> $GITHUB_OUTPUT
+      # - name: Get changed schemas
+      #   id: get-changed-schemas
+      #   shell: bash
+      #   run: |
+      #     FILES_LIST=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
+      #     LIST_IN_ONE_LINE=$(echo "$FILES_LIST" | tr '\n' ';')
+      #     echo "FILE_NAMES=$LIST_IN_ONE_LINE" >> $GITHUB_OUTPUT
         
+      - name: Get changed schemas
+        id: get-changed-schema
+        uses: ./action-get-changed-files
+        with:
+          file_separator: ";"
+
       - name: Print changed schemas
         shell: bash
         run: |
           echo "List of changed-schema file names:"
-          echo "${{ steps.get-changed-schemas.outputs.FILE_NAMES }}"
+          echo "${{ steps.get-changed-schema.outputs.file_names }}"
