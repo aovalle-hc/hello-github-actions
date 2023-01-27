@@ -11,7 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      - name: Show github ref
+        shell: bash
+        run: echo ${GITHUB_REF}
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Output values
         shell: bash
         run: |
-          echo "${{ github.event.pull_request.head.sha }}"
+          echo "${{ steps.extract_branch.outputs.branch }}"
