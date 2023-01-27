@@ -27,6 +27,8 @@ jobs:
         id: get-changed-schema
         uses: ./action-get-changed-files
         with:
+          base_branch: "${{ github.event.pull_request.base.sha }}"
+          branch_to_merge: "${{ github.event.pull_request.head.sha }}"
           file_separator: ";"
 
       - name: Print changed schemas
