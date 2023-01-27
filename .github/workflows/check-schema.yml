@@ -11,16 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Show github ref
-        shell: bash
-        run: echo ${GITHUB_REF}
-
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
-
-      - name: Output values
+      - name: Get changed schemas
+        id: get-changed-schemas
         shell: bash
         run: |
-          echo "${{ steps.extract_branch.outputs.branch }}"
+          git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/ > changed-schemas.txt
+          echo "FILE_NAME=changed-schemas.txt" >> $GITHUB_OUTPUT
+        
+      - name: Print changed schemas
+        shell: bash
+        run: |
+          echo "List of changed-schema file names:"
+          echo "${{ steps.get-changed-schemas.outputs.FILE_NAME }}"
+          cat changed-schemas.txt
