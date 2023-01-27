@@ -27,7 +27,8 @@ runs:
       shell: bash
       run: |
         FILE_LIST_NEW_LINE_SEPARATED=\
-          $(git diff ${{ inputs.base_branch }}...${{ inputs.branch_to_merge }} --name-status --relative=snowplow/schemas/)
+        $(git diff ${{ inputs.base_branch }}...${{ inputs.branch_to_merge }} \
+          --name-status --relative=snowplow/schemas/)
         FILE_LIST_CUSTOM_SEPARATED=$(echo "$FILE_LIST_NEW_LINE_SEPARATED" | \
           tr '\n' '${{ inputs.file_separator }}')
         echo "FILE_NAMES=$FILE_LIST_CUSTOM_SEPARATED" >> $GITHUB_OUTPUT
