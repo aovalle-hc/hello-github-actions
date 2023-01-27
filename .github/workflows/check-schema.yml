@@ -19,9 +19,9 @@ jobs:
         id: get-changed-schemas
         shell: bash
         run: |
-          CONTENT=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
-          echo "FILE_NAMES=$CONTENT"
-          echo "FILE_NAMES=$CONTENT" >> $GITHUB_OUTPUT
+          FILES_LIST=$(git diff origin/main...${{ github.event.pull_request.head.sha }} --name-status --relative=snowplow/schemas/)
+          LIST_IN_ONE_LINE=$(echo "$FILES_LIST" | tr '\n' ';')
+          echo "FILE_NAMES=$LIST_IN_ONE_LINE" >> $GITHUB_OUTPUT
         
       - name: Print changed schemas
         shell: bash
