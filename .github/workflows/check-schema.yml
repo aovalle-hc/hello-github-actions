@@ -14,4 +14,4 @@ jobs:
       - name: Output values
         shell: bash
         run: |
-          echo "checking on PR opened"
+          echo "${{ github.event.pull_request.head.sha }}"
