@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      - name: Print event_name
+        run: |
+          echo "${{ github.event_name }}"
       - uses: ./action-a
         with:
           MY_NAME: "Mona"
