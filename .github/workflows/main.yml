@@ -5,10 +5,10 @@ jobs:
     name: Hello world action
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Print event_name
-        run: |
-          echo "${{ github.event_name }}"
+      - uses: actions/checkout@v3
       - uses: ./action-a
         with:
           MY_NAME: "Mona"
+      - name: Print event_name
+        run: |
+          echo "${{ github.event_name }}"
