@@ -1,7 +1,5 @@
 name: A workflow for my Hello World file
-on: 
-  - workflow_dispatch
-  - workflow_call
+on: workflow_dispatch
 jobs:
   build:
     name: Hello world action
@@ -14,3 +12,7 @@ jobs:
       - name: Print event_name
         run: |
           echo "${{ github.event_name }}"
+
+  embed:
+    uses: aovalle-hc/hello-github-actions/.github/workflows/main.yml@main
+    needs: build
